@@ -51,8 +51,14 @@ klasses = [
 }
 
 # TODO: Create a text based report like in benchmarking.rake
+# from vais, only care about unoptimized methods
+# have a rubyspecs type filter
 # Add class methods as well as instance methods
 # Need to instantiate an object to test?? Didn't seem to make a difference with String#index or String#gsub
+# jgaskins:
+# It might be a good idea to make that run in its own process, though. That may already be the intended case, but just adding it here for posterity. The reason I mention it is that functions can get deoptimized for being too polymorphic.
+# For example, if you call a function with more than some VM-specific number of different types of arguments (pretty sure in Safari it's 4, might be 3 in Chrome), it can decide to deoptimize the function because the cost (both performance and memory) of optimizing it for each different type of argument potentially outweighs the performance you gain from it.
+# In the Chrome profiler, the warning it gives for this is "Optimized too many times".
 
 optimization_status = Hash[klasses.map do |klass|
   methods = klass.instance_methods
